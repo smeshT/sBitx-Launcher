@@ -2,9 +2,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.log
-*.bak
+*.bak*
 my_launcher.html
 ARDOP*
-
-# keep unit files even if a broad rule ever appears
-!systemd/
