@@ -1,0 +1,22 @@
+[Unit]
+Description=sBitx Shared Desktop (Xvfb :20 + openbox + x11vnc + websockify)
+Documentation=https://github.com/smeshT/sbitx-launcher
+After=network-online.target sound.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+Environment=DISPLAY=:20
+Environment=HOME=/home/pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/my_launcher/scripts/start_desktop_persistent.sh
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+StandardOutput=append:/var/log/my-launcher-desktop.log
+StandardError=append:/var/log/my-launcher-desktop.log
+
+[Install]
+WantedBy=multi-user.target

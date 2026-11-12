@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>sBitx Shared Launcher</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: #ddd;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 1rem;
+        }
+        h1 {
+            color: white;
+        }
+        .panel {
+            max-width: 460px;
+            margin: auto;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        /* Phone layout: stack rows vertically, stretch buttons full-width.
+           Sizes roughly 2x the desktop defaults so taps are easy and text
+           is comfortable to read at arm's length on a phone. */
+        @media (max-width: 640px) {
+            body {
+                padding: 0.5rem;
+                font-size: 1.4rem;        /* base up from 1rem (browser default 16px) */
+            }
+            .panel {
+                max-width: 100%;
+                padding: 1rem;
+                border-radius: 8px;
+            }
+            .status-bar {
+                gap: 0.5rem;
+                margin: 0 0 1rem 0;
+                justify-content: center;
+            }
+            .status-item {
+                padding: 0.5rem 0.8rem;
+                font-size: 1rem;
+            }
+            .row {
+                flex-direction: column;
+                align-items: normal;
+                gap: 0.6rem;
+                margin: 1rem 0;
+            }
+            .name {
+                text-align: left;
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
+            button, a.button {
+                min-width: 0;
+                width: 30%;
+                padding: 1rem 1rem;
+                font-size: 1.3rem;
+                border-radius: 6px;
+            }
+            form { display: contents; }
+            hr { margin: 1rem 0; border-color: #444; }
+            h1 { font-size: 1.6rem; margin-bottom: 0.7rem; }
+            p.note, .note { font-size: 1rem; line-height: 1.5; }
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin: 0.7rem 0;
+            align-items: center;
+        }
+        .name {
+            flex: 1;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+        button, a.button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.6rem 0.8rem;
+            text-decoration: none;
+            min-width: 80px;
+            font-weight: bold;
+        }
+        .stop {
+            background: #aa2222;
+        }
+        .reticulum {
+            background: #228822;
+        }
+
+        .status-bar {
+            max-width: 760px;
+            margin: 0 auto 1rem auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+        }
+
+        .status-item {
+            padding: 0.35rem 0.55rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .running {
+            background: #174f17;
+            color: #b8ffb8;
+            border: 1px solid #2ecc71;
+        }
+
+        .stopped {
+            background: #4f1717;
+            color: #ffb8b8;
+            border: 1px solid #cc3333;
+        }
+
+        .mode {
+            background: #1f3a5f;
+            color: #cfe2ff;
+            border: 1px solid #3a78c2;
+        }
+
+        .mode-override {
+            background: #5a1f1f;
+            color: #ffd0d0;
+            border: 1px solid #c8463a;
+        }
+
+        .mode-button {
+            display: inline-block;
+            padding: 0.35rem 0.55rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            background: #2a2a2a;
+            color: #aaa;
+            border: 1px solid #555;
+            cursor: pointer;
+        }
+
+        .mode-button:hover {
+            background: #3a3a3a;
+            color: #fff;
+        }
+
+        .mode-button.active {
+            background: #1f3a5f;
+            color: #cfe2ff;
+            border: 1px solid #3a78c2;
+            box-shadow: 0 0 0 1px #3a78c2;
+        }
+
+        .mode-button.active:hover {
+            background: #284a78;
+        }
+    </style>
+</head>
+<body>
+    <h1>sBitx Shared Launcher</h1>
+
+    <div class="status-bar">
+        {% for name, running in status.items() %}
+            <span class="status-item {{ 'running' if running else 'stopped' }}">
+                {{ name }}: {{ 'Running' if running else 'Stopped' }}
+            </span>
+        {% endfor %}
+    </div>
+
+    <div class="panel">
+
+
+        <div class="row">
+            <div class="name">Open VNC Tab</div>
+            <a class="button" target="_blank" href="http://{{ host }}:6100/vnc_auto.html?autoconnect=true&resize=remote&clip=1&quality=8&compression=0&password=sbitx&view_only=0&shared=1&reconnect=true&reconnect_delay=1000&retry_count=60">Open</a>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="name">JS8Call</div>
+            <form action="/start-js8call" method="post"><button>Start</button></form>
+            <form action="/stop-js8call" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name">FLDigi</div>
+            <form action="/start-fldigi" method="post"><button>Start</button></form>
+            <form action="/stop-fldigi" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name">WSJT-X</div>
+            <form action="/start-wsjtx" method="post"><button>Start</button></form>
+            <form action="/stop-wsjtx" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name">freedvtnc2 Chat</div>
+            <a class="button" target="_blank" href="http://{{ host }}:8091">Open</a>
+            <form action="/stop-ttyd" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name">Pat Menu</div>
+            <a class="button" target="_blank" href="http://{{ host }}:5000">Open</a>
+            <form action="/start-patmenu" method="post"><button>Start</button></form>
+            <form action="/stop-patmenu" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name">Pavucontrol</div>
+            <form action="/start-pavucontrol" method="post"><button>Start</button></form>
+            <form action="/stop-pavucontrol" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name">GridTracker</div>
+            <form action="/start-gridtracker" method="post"><button>Start</button></form>
+            <form action="/stop-gridtracker" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="name">MeshChat</div>
+            <a class="button" target="_blank" href="http://{{ host }}:8000">Open</a>
+            <form action="/restart-reticulum" method="post" title="Restart rnsd + meshchatx. Bounces freedvtnc2 too."><button>Restart</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name" title="Toggles the FreeDV audio modem in the [[freedvtnc2 Interface]] block of ~/.reticulum/config and starts/stops freedvtnc2.service. rnsd + meshchat stay up.">freedvtnc2 modem</div>
+            <form action="/start-reticulum" method="post" title="Enable FreeDV audio modem in Reticulum. Stops js8call/wsjtx/fldigi if running (~15s)."><button class="reticulum">Start</button></form>
+            <form action="/stop-reticulum" method="post" title="Disable FreeDV audio modem in Reticulum. Frees ALSA loopback subdevs for js8call/wsjtx/fldigi/modem73."><button class="stop">Stop</button></form>
+        </div>
+
+        <div class="row">
+            <div class="name" title="modem73 running headless on the ALSA Loopback device, for self-loopback testing of the Reticulum-over-OFDM channel. Uses ~/.config/modem73/settings for port + audio + callsign (port=8002 on sbitx to avoid colliding with freedvtnc2 :8001). Do NOT run at the same time as the Modem73 TUI row above — same binary, likely shared config.">Modem73</div>
+            <form action="/start-modem73-loopback" method="post"><button class="reticulum">Start</button></form>
+            <form action="/stop-modem73-loopback" method="post"><button class="stop">Stop</button></form>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="name" title="Interactive modem73 TUI in an lxterminal on the shared desktop (visible in the noVNC tab). Opens AudioInjector HAT directly. Do NOT run at the same time as the Modem73 row above — same binary, likely shared config.">Modem73 Config TUI</div>
+            <form action="/reset-modem73-audio" method="post" onsubmit="return confirm('Reset modem73 audio device?\n\nThis will:\n  - Set audio_input=0 and audio_output=0 in ~/.config/modem73/settings (uses the default sink — always works on any hardware)\n  - Restart the modem73 loopback subprocess so the new settings take effect\n\nUse this when the audio device moved (e.g. digirig unplugged or switched USB ports) and modem73 fails to open the audio.\n\nClick OK to proceed.');">
+                <button title="Set audio to 0 in settings + restart modem73. Use when audio device moved and modem73 won&apos;t start.">Reset Audio</button></form>
+            <form action="/start-modem73-tui" method="post"><button>Start</button></form>
+            <form action="/stop-modem73-tui" method="post"><button class="stop">Stop</button></form>
+        </div>
+
+
+        <div class="row">
+            <div class="name" title="Upstream modem73 (RFnexus) TUI on Digirig audio. Uses /home/pi/.config/modem73-digirig/settings. Do NOT run at the same time as the Modem73 TUI above.">Modem73 Digirig TUI</div>
+            <form action="/start-modem73-digirig-tui" method="post"><button>Start</button></form>
+            <form action="/stop-modem73-digirig-tui" method="post"><button class="stop">Stop</button></form>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="name" title="The sBitx radio binary. The whole rest of the launcher assumes it is running. Use Restart if the audio thread wedges or the 8443 UI is hung.">sBitx radio</div>
+            <form action="/start-sbitx" method="post" title="Start the sBitx radio binary. No-op if already running."><button>Start</button></form>
+            <form action="/restart-sbitx" method="post" title="Hard restart: SIGKILL the sBitx binary, then relaunch after 1s. Audio is interrupted for ~10s on the new boot."><button>Restart</button></form>
+            <a class="button" target="_blank" href="https://{{ host }}:8443" title="Open the sBitx web UI (HTTPS, self-signed cert — accept the warning).">Open</a>
+        </div>
+
+        <div class="row">
+            <div class="name">Reboot Pi</div>
+            <form action="/reboot-pi" method="post" onsubmit="return confirm('Reboot the sbitx box now?\n\nThis will disconnect SSH, VNC, the launcher, and any active QSOs / Reticulum sessions.\nGive it ~60s before reconnecting.');">
+                <button class="stop">Reboot</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>
