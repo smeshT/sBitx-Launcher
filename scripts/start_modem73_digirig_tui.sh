@@ -20,7 +20,7 @@ done
 
 lxterminal --title="modem73-digirig" \
     -e bash -c "echo \"=== modem73 Digirig TUI starting ===\"; \
-                 exec /usr/local/bin/modem73-digirig --config /home/pi/.config/modem73-digirig/settings --port 8003 --control-port 8074" \
+                 exec /usr/local/bin/modem73 --config /home/pi/.config/modem73-digirig/settings --port 8003 --control-port 8074" \
     >/dev/null 2>&1 &
 
 exit 0

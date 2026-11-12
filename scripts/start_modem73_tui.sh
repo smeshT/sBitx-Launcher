@@ -68,7 +68,7 @@ lxterminal --title="modem73" \
                  echo 'If audio device or callsign are wrong, change them in the'; \
                  echo \"TUI's Config menu, save, then Quit and Restart.\"; \
                  echo; \
-                 exec /usr/local/bin/modem73" \
+                 exec /usr/local/bin/modem73 --config /home/pi/.config/modem73/settings" \
     >/dev/null 2>&1 &
 
 exit 0
