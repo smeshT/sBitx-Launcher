@@ -14,10 +14,13 @@ that is already configured.
 ## Intended base system
 
 **Install the [drexjj 64-bit sBitx image](https://github.com/drexjj/sbitx)
-first.** That image ships the sBitx application, the desktop environment,
-and most of the apps these buttons launch, already configured at
-`/home/pi` under user `pi`. This launcher is layered on top of it and
-assumes it is there.
+first.** That image provides the sBitx application itself, the desktop
+environment, and the common GUI apps at `/home/pi` under user `pi`.
+
+**The image does not include everything.** The Reticulum stack
+(`rns`, `lxmf`, `meshchatx`), freeDV TNC, and modem73 are installed
+separately — see [Bootstrap](#bootstrap). This launcher is a launcher, not
+a provisioner.
 
 The upstream project is a volunteer effort (led by W9JES), not affiliated
 with HF Signals. Its GitHub pages are periodically unavailable; if the
@@ -27,6 +30,38 @@ launch.
 
 Minimum confirmed base: Raspberry Pi 4, aarch64, Debian 12 bookworm,
 Python 3 with Flask 2.2.
+
+## Bootstrap
+
+After flashing the drexjj image, these have to be installed before the
+launcher is useful. All are plain pipx installs plus systemd units.
+
+```bash
+python3 -m pipx install rns
+python3 -m pipx install lxmf
+python3 -m pipx install reticulum-meshchatx
+```
+
+Then create `~/.reticulum/config`, and install the units for `rnsd`,
+`lxmd` and `meshchatx` under `/etc/systemd/system/`. The units are
+distro-side, not launcher-side — they are not in this repo.
+
+### modem73 must be 2.4.8 or newer
+
+**The modem73 that ships with sBitx toolboxes does not work.** Versions
+before v2.4.8 predate the audio-backend release and the CSMA fixes, and
+fail against sBitx audio. Build from
+[RFnexus/modem73](https://github.com/RFnexus/modem73) at **v2.4.8+**:
+
+```bash
+git clone https://github.com/RFnexus/modem73.git
+cd modem73 && git checkout v2.4.8
+make -j4 && sudo make install
+```
+
+Confirm the build by checking `make` reports `BASE_VERSION` 2.4.8 or
+higher before installing. Older builds report `MODEM73 build <date>` with
+no `--audio-backend` option.
 
 ## Status
 
@@ -50,20 +85,24 @@ Known deliberate omissions:
 
 ## Prerequisites
 
-The drexjj image provides most of this. Items marked **extra** are not
-part of it and must be added separately if you want those buttons to work.
+The drexjj image provides the sBitx application, desktop and common GUI
+apps. Everything else in this table is installed separately — see
+[Bootstrap](#bootstrap). Items marked **optional** are not needed for the
+core launcher rows.
 
-| Category | Expected on disk | Provided by image |
+| Category | Expected on disk | Source |
 |---|---|---|
-| sBitx itself | `/home/pi/sbitx` (includes `web/scripts/start_novnc_proxy.sh`) | yes |
-| Reticulum | `/home/pi/.reticulum/config`, `rnsd`, `lxmd`, `meshchatx` | yes |
-| freeDV | `/home/pi/.freedvtnc2.conf`, `/home/pi/freedata` | yes |
-| patmenu | `/home/pi/patmenu2` | yes |
-| VNC desktop | `x11vnc`, `websockify`, `Xvfb`, `openbox`, `~/.vnc/passwd` | yes |
-| GUI apps | `lxterminal`, `fldigi`, `js8call`, `wsjtx`, `pavucontrol` | yes |
-| Python | `python3`, `flask` | yes |
-| modem73 | `/usr/local/bin/modem73`, `~/.config/modem73/settings` | **extra** |
-| GridTracker | `gridtracker` on `PATH` | **extra** |
+| sBitx itself | `/home/pi/sbitx` (includes `web/scripts/start_novnc_proxy.sh`) | image |
+| desktop / VNC | `x11vnc`, `websockify`, `Xvfb`, `openbox`, `~/.vnc/passwd` | image |
+| GUI apps | `lxterminal`, `fldigi`, `js8call`, `wsjtx`, `pavucontrol` | image |
+| Python | `python3`, `flask` | image |
+| Reticulum | `/home/pi/.reticulum/config`, `rnsd` | pipx |
+| LXMF | `lxmd` | pipx |
+| meshchatx | `meshchatx` | pipx |
+| freeDV TNC | `/home/pi/.freedvtnc2.conf`, `/home/pi/freedata` | **verify on your box** |
+| patmenu | `/home/pi/patmenu2` | **verify on your box** |
+| modem73 | `/usr/local/bin/modem73` | build **v2.4.8+** |
+| GridTracker | `gridtracker` on `PATH` | **optional** |
 
 Every `sudo systemctl <verb> <unit>` call assumes the corresponding unit
 exists. The launcher restarts, starts and stops units; it never creates
