@@ -78,17 +78,22 @@ The page has a row for each program. Rows look like this:
 
 | Button | Colour | What it does |
 |---|---|---|
-| **Start** | blue | Starts the program in the background on the radio |
+| **Start** | blue | Starts the program in a private screen you view through **Open VNC Tab** |
 | **Stop** | red | Stops that program |
 | **Open** | blue | Opens a new browser tab for that program |
 | **Start** | green | Starts the FreeDV modem inside Reticulum (special case, see below) |
 
 ### The blue Start button — runs a program invisibly
 
-Blue **Start** launches the program on the radio itself. Most of these
-programs have no window of their own that you can see from your
-browser — they just run. Once running, the status pill at the top of
-the page changes from red *Stopped* to green *Running*.
+Blue **Start** launches the program inside a private virtual screen that
+runs on the radio but is **not** the radio's own display. You cannot see
+these programs on the sBitx touchscreen, and they are not meant to be
+there — they appear only in the **Open VNC Tab** window.
+
+Nothing visible happens when you press Start, because the screen they
+open on isn't on screen anywhere until you look at it. The status pill at
+the top of the page changes from red *Stopped* to green *Running* — that
+is the confirmation that it worked.
 
 ### The blue Open button — opens the program's own page
 
@@ -117,36 +122,40 @@ Green here means "changes the radio's network configuration" rather than
 JS8Call, WSJT-X, and FLDigi if they are running, because those programs
 and FreeDV cannot both use the sound card at the same time.
 
-### The Open VNC Tab button — the radio's actual desktop
+### The Open VNC Tab button — where the Start buttons actually go
 
 The first row on the page is **Open VNC Tab**. This one is different
-from the others, and it is the one people find most confusing, so:
+from the others, and it is the one people find most confusing, so read
+this part carefully.
 
-**Open VNC Tab opens a window showing the radio's own computer
-desktop.** Not a web page built by the program — the real desktop, the
-same thing you would see if you plugged a monitor into the Raspberry Pi.
-You can click icons on it, drag windows around, and type into it.
+**It opens a window onto a separate, empty screen.** Somewhere for these
+programs to appear — not a copy of the radio's screen, and not the radio
+program's own page.
 
-This matters because **several of the programs in the list below have
-no web page of their own**. JS8Call, FLDigi, WSJT-X, GridTracker,
-Pavucontrol, and the Modem73 configuration screen are ordinary desktop
-programs. They have no address to browse to.
+**It starts black, and that is normal.** This window does not show the
+sBitx touchscreen. It does not mirror what is on the radio's own display.
+It is a blank screen that exists for the programs in this list, and it
+stays blank until you press a blue **Start** button and something opens
+on it. A black VNC window is not a fault.
+
+This matters because **several of the programs below have no web page of
+their own**. JS8Call, FLDigi, WSJT-X, GridTracker, Pavucontrol, and the
+Modem73 configuration screen are ordinary desktop programs. They have no
+address to browse to. This window is the only way to see them.
 
 So the workflow for those is two steps:
 
-1. Click blue **Start** on the program's row. The program launches on
-   the radio's desktop.
+1. Click blue **Start** on the program's row.
 2. Click blue **Open** on the **Open VNC Tab** row. A new browser window
-   appears showing that desktop — and your program is sitting there,
+   appears — and your program is now on that previously black screen,
    ready to use.
 
-If you click Open VNC Tab and see an empty desktop, it means the program
-hasn't been started yet. Go back to the launcher tab and press Start
-first.
+If you open the VNC window first, you will see black. Press Start, and
+the program appears in the window you already have open.
 
 Keep the VNC window open while you use those programs. Closing it does
-not stop them, but you won't be able to see or control them until you
-open it again.
+not stop them — they keep running, invisible — but you cannot see or
+control them until you open it again.
 
 ### Rows that are always running
 
@@ -193,9 +202,10 @@ and the FreeDV modem all want the same audio device. Starting one while
 another is running usually results in silence or an error. Stop the one
 you were using first.
 
-**Nothing happens when I press Start.** Give it a few seconds and
-reload the page — the pill at the top is the real answer, not whether a
-window appeared. Several programs take ten seconds to come up.
+**Nothing happens when I press Start.** Nothing on screen *should*
+happen — the program opened on a screen you aren't looking at yet. Press
+**Open** on the **Open VNC Tab** row to see it, and give it ten seconds;
+some programs are slow to appear.
 
 **The page loads but buttons don't work.** You are probably looking at
 an older copy of the page. Reload it with Ctrl+F5 on a laptop, or pull
@@ -217,7 +227,7 @@ the same wifi. A phone on mobile data cannot reach the radio.
 |---|---|
 | Open the launcher | `http://sbitx.local:8090` |
 | Can't find the radio | Log into your router, look for **sbitx** in its device list |
-| Start JS8Call, FLDigi, WSJT-X, GridTracker, Pavucontrol, Modem73 | Blue **Start**, then **Open** on the **Open VNC Tab** row |
+| Start JS8Call, FLDigi, WSJT-X, GridTracker, Pavucontrol, Modem73 | Blue **Start**, then **Open** on **Open VNC Tab** — the screen is black until then |
 | FreeDV chat | Blue **Start** on **freedvtnc2 modem**, then blue **Open** on **freedvtnc2 Chat** |
 | MeshChat / radio messaging | Blue **Open** on **MeshChat** (`:8000`) |
 | Winlink / Pat | Blue **Start** on **Pat Menu**, then **Open** (`:5000`) |
