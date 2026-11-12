@@ -95,9 +95,7 @@ Known deliberate omissions:
   Narrowing that to a per-command allowlist is left as an exercise.
 - **Audio is out of scope.** Card indices and device names vary by
   hardware. sBitx is designed not to need an external interface, so the
-  defaults target the built-in audio. The modem73 Digirig TUI row is
-  kept for people experimenting with external interfaces; it assumes
-  card 5 and you should expect to edit it.
+  defaults target the built-in audio. 
 
 ## Prerequisites
 
