@@ -166,7 +166,6 @@ def index():
         "freedvtnc2 Chat": (is_running(r"tmux.*-s freedvtnc2") and is_running(r"/local/bin/freedvtnc2")),
         "Modem73 TUI": is_running(r"lxterminal.*--title=modem73[^-]"),
         "freedvtnc2 interface": freedvtnc2_in_reticulum(),
-        "Modem73 interface": modem73_in_reticulum(),
         "Pat Menu": is_running("Pat Menu"),
     }
     
@@ -287,26 +286,6 @@ def freedvtnc2_in_reticulum():
         return False
     return out == "true"
 
-
-def modem73_in_reticulum():
-    """Return True iff the [[Modem73]] block in
-    ~/.reticulum/config has enabled = true. Drives the Modem73
-    interface status pill.
-
-    Pattern source: freedvtnc2_in_reticulum(). The check runs an
-    external helper script (check_modem73_in_reticulum.sh) which
-    invokes an AWK parser (parse_modem73_block.awk) — same
-    pattern as the freedvtnc2 pair, just for the Modem73 block.
-    """
-    import subprocess
-    try:
-        out = subprocess.check_output(
-            ["/home/pi/my_launcher/scripts/check_modem73_in_reticulum.sh"],
-            stderr=subprocess.DEVNULL, timeout=2,
-        ).decode().strip()
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
-        return False
-    return out == "true"
 
 @app.route("/start-pavucontrol", methods=["POST"])
 def start_pavucontrol():
