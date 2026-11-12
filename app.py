@@ -165,7 +165,6 @@ def index():
         "WSJT-X": is_running("wsjtx"),
         "freedvtnc2 Chat": (is_running(r"tmux.*-s freedvtnc2") and is_running(r"/local/bin/freedvtnc2")),
         "Modem73 TUI": is_running(r"lxterminal.*--title=modem73[^-]"),
-        "Modem73 Digirig TUI": is_running("lxterminal.*--title=modem73-digirig"),
         "freedvtnc2 interface": freedvtnc2_in_reticulum(),
         "Modem73 interface": modem73_in_reticulum(),
         "Pat Menu": is_running("Pat Menu"),
@@ -426,21 +425,6 @@ def stop_modem73_tui():
     on the binary name alone, which would also match other
     lxterminals the user has open."""
     run_script("stop_modem73_tui.sh")
-    return redirect(url_for("index"))
-
-
-@app.route("/start-modem73-digirig-tui", methods=["POST"])
-def start_modem73_digirig_tui():
-    """Open upstream modem73 in TUI mode on Digirig audio.
-    Uses /home/pi/.config/modem73-digirig/settings which the
-    operator configures on first run."""
-    run_script("start_modem73_digirig_tui.sh")
-    return redirect(url_for("index"))
-
-@app.route("/stop-modem73-digirig-tui", methods=["POST"])
-def stop_modem73_digirig_tui():
-    """Close the modem73 Digirig TUI lxterminal."""
-    run_script("stop_modem73_digirig_tui.sh")
     return redirect(url_for("index"))
 @app.route("/restart-reticulum", methods=["POST"])
 def restart_reticulum_and_meshchatx():
