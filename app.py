@@ -341,40 +341,6 @@ def stop_reticulum():
     run_script("toggle_freedv_audio.sh", args=["off"])
     return redirect(url_for("index"))
 
-@app.route("/start-modem73-loopback", methods=["POST"])
-def start_modem73_loopback():
-    """Enable the Modem73 OFDM modem in Reticulum and start the
-    modem73 loopback process.
-
-    Pattern source: /start-reticulum on the freedvtnc2 audio modem
-    (toggle_freedv_audio.sh). This script does the same three things:
-      1. Set `enabled = true` for the [[Modem73]] block in
-         /home/pi/.reticulum/config (atomic edit, mirrors the
-         freedvtnc2 toggle)
-      2. Start the modem73 loopback subprocess (no systemd unit —
-         it's a detached child launched by start_modem73_loopback.sh)
-      3. Restart rnsd so it picks up the new interface config
-         (~3s transport bounce, meshchat auto-restarts via
-         Requires=rnsd)
-
-    Competing audio modems (js8call, wsjtx, fldigi, pavucontrol) are
-    pkill'd first because they may hold the ALSA loopback subdevs
-    that modem73 needs."""
-    run_script("toggle_modem73_audio.sh", args=["on"])
-    return redirect(url_for("index"))
-
-
-@app.route("/stop-modem73-loopback", methods=["POST"])
-def stop_modem73_loopback():
-    """Disable the Modem73 OFDM modem in Reticulum and stop the
-    modem73 loopback process. Mirror of /start-modem73-loopback.
-
-    Frees the ALSA loopback subdevs for js8call/wsjtx/fldigi/freedvtnc2.
-    rnsd is restarted so it stops trying to TCP-connect to modem73's
-    KISS port."""
-    run_script("toggle_modem73_audio.sh", args=["off"])
-    return redirect(url_for("index"))
-
 @app.route("/reset-modem73-audio", methods=["POST"])
 def reset_modem73_audio():
     """Reset modem73 audio device to default (audio_input=0, audio_output=0).

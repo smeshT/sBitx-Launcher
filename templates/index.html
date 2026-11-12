@@ -252,12 +252,6 @@
             <form action="/stop-reticulum" method="post" title="Disable FreeDV audio modem in Reticulum. Frees ALSA loopback subdevs for js8call/wsjtx/fldigi/modem73."><button class="stop">Stop</button></form>
         </div>
 
-        <div class="row">
-            <div class="name" title="modem73 running headless on the ALSA Loopback device, for self-loopback testing of the Reticulum-over-OFDM channel. Uses ~/.config/modem73/settings for port + audio + callsign (port=8002 on sbitx to avoid colliding with freedvtnc2 :8001). Do NOT run at the same time as the Modem73 TUI row above — same binary, likely shared config.">Modem73</div>
-            <form action="/start-modem73-loopback" method="post"><button class="reticulum">Start</button></form>
-            <form action="/stop-modem73-loopback" method="post"><button class="stop">Stop</button></form>
-            </form>
-        </div>
 
         <div class="row">
             <div class="name" title="Interactive modem73 TUI in an lxterminal on the shared desktop (visible in the noVNC tab). Opens AudioInjector HAT directly. Do NOT run at the same time as the Modem73 row above — same binary, likely shared config.">Modem73 Config TUI</div>
