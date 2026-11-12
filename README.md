@@ -7,6 +7,12 @@ radio. It gives you one web page with buttons to launch and stop the
 apps you actually use — fldigi, JS8Call, WSJTX, GridTracker, freeDV,
 Reticulum/meshchatx, modem73, patmenu, and the shared VNC desktop.
 
+**Using it, not installing it? Read [USAGE.md](USAGE.md).** It explains
+which button does what, and how to find the launcher's address on your
+network without knowing what an IP address is.
+
+The launcher UI is served on **port 8090** — `http://<radio-address>:8090`.
+
 This is a thin launcher, not a distro. It does **not** install anything
 and it does **not** set up the apps it launches. It drives an sBitx box
 that is already configured.
