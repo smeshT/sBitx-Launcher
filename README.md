@@ -63,6 +63,22 @@ Confirm the build by checking `make` reports `BASE_VERSION` 2.4.8 or
 higher before installing. Older builds report `MODEM73 build <date>` with
 no `--audio-backend` option.
 
+**One binary, multiple configs.** v2.4.8+ takes `--config FILE` and loads
+key=value settings from that file, with explicit command-line flags
+winning over the file. So a single `modem73` binary serves every setup —
+point each launcher row at a different config instead of shipping
+separately built binaries:
+
+```bash
+modem73 --config ~/.config/modem73/settings
+modem73 --config ~/.config/modem73-digirig/settings \
+        --port 8003 --control-port 8074
+```
+
+Omitting the argument to `--config` falls back to
+`~/.config/modem73/settings`. Do not maintain per-device binaries; keep
+one install and one config file per rig.
+
 ## Status
 
 Extracted from a working sbitx unit on 2026-11-11. It runs. It is not
