@@ -112,13 +112,12 @@ launcher — the same one, just with a different number on the end.
 
 ### The green Start button — the FreeDV modem
 
-One row, **freedvtnc2 modem**, has a **green** Start button. It is not a
-program window. It switches the FreeDV audio modem *on inside
-Reticulum*, the radio's messaging system, and restarts Reticulum so the
-change takes hold.
+One row, **freedvtnc2 modem**, has a **green** Start button. It starts
+freedvtnc2 as a headless service that reticulum can connect to. This is
+different from the row called **freedvtnc2 Chat** which opens in the novnc
+browser window and can be used for testing or as a keyboard chat.
 
-Green here means "changes the radio's network configuration" rather than
-"starts an app". Pressing it takes about fifteen seconds and will stop
+Pressing it takes about fifteen seconds and will stop
 JS8Call, WSJT-X, and FLDigi if they are running, because those programs
 and FreeDV cannot both use the sound card at the same time.
 
@@ -166,10 +165,6 @@ A few things should always be running and don't need starting:
   **Restart** on this row and wait about ten seconds.
 - **MeshChat / Reticulum** — the messaging stack. **Restart** here
   bounces the whole thing, including the FreeDV modem.
-- **Modem73** — the OFDM data modem. Press **Start** to open its
-  configuration screen on the VNC desktop. **Reset Audio** is the
-  repair button: use it if you have unplugged or moved a USB sound
-  device and the modem can no longer find its sound card.
 
 ### Reboot Pi
 
@@ -197,8 +192,8 @@ those programs start on demand when you press their Start button.
 
 ## Things that surprise people
 
-**Two programs can't share the sound card.** JS8Call, WSJT-X, FLDigi,
-and the FreeDV modem all want the same audio device. Starting one while
+**Two programs can't share the sound card.** JS8Call, WSJT-X, FLDigi, 
+Modem73 and freedvtnc2 all want the same audio device. Starting one while
 another is running usually results in silence or an error. Stop the one
 you were using first.
 
@@ -215,9 +210,6 @@ down to refresh on a phone.
 but the page doesn't appear, you probably left the `:8090` off the end.
 Ports are the number after the colon — the address alone goes somewhere
 else.
-
-**It works on the laptop but not the phone.** Both devices must be on
-the same wifi. A phone on mobile data cannot reach the radio.
 
 ---
 
